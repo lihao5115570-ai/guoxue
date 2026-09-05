@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  profiles     BirthProfile[]
+}
+
+model BirthProfile {
+  id           String       @id @default(cuid())
+  userId       String?
+  user         User?        @relation(fields: [userId], references: [id])
+  name         String?
+  gender       String
+  birthDate    DateTime
+  birthTime    String
+  birthCity    String
+  calendarType String
+  createdAt    DateTime     @default(now())
+  baziResults  BaziResult[]
+}
+
+model BaziResult {
+  id             String       @id @default(cuid())
+  birthProfileId String
+  birthProfile   BirthProfile @relation(fields: [birthProfileId], references: [id])
+  dataJson       Json
+  createdAt      DateTime     @default(now())
+}
+
+model MarriageResult {
+  id           String   @id @default(cuid())
+  profileAJson Json
+  profileBJson Json
+  dataJson     Json
+  createdAt    DateTime @default(now())
+}
+
+model DivinationResult {
+  id                String   @id @default(cuid())
+  question          String
+  category          String
+  linesJson         Json
+  changingLinesJson Json
+  originalHexagram  String
+  changedHexagram   String?
+  resultJson        Json
+  createdAt         DateTime @default(now())
+}
+
+model Article {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  description String
+  content     String
+  category    String
+  keywords    String
+  coverImage  String?
+  status      String    @default("draft")
+  publishedAt DateTime?
+  updatedAt   DateTime  @updatedAt
+  author      String?
+}

@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js build output
+.next/
+out/
+
+# local env
+.env
+.env*.local
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local QA/cache
+.codex-qa/
+
+# raw source archives and large local reference libraries
+十本经典四柱古籍/
+风水电子书合集（22G，729个文件）/
+
+# OS/editor
+.DS_Store
+Thumbs.db
