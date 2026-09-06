@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { BaguaCastingAnimation } from "@/components/BaguaCastingAnimation";
+import { generateHexagram } from "@/lib/divination/generator";
+import { generateDivinationInterpretation } from "@/lib/divination/interpretation";
 import type { HexagramResult } from "@/lib/divination/types";
 
 const categories = ["事业", "财运", "感情", "选择", "人际", "其他"];
@@ -17,12 +19,8 @@ export function DivinationForm() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
-    const response = await fetch("/api/divination", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question, category })
-    });
-    const data = (await response.json()) as { id: string; result: HexagramResult };
+    const generated = generateHexagram(question, category);
+    const data = { id: generated.id, result: generated, interpretation: generateDivinationInterpretation(generated) };
     localStorage.setItem(`divination:${data.id}`, JSON.stringify(data));
     setResult(data.result);
     setLoading(false);
@@ -36,7 +34,7 @@ export function DivinationForm() {
           changingLines={result.changingLines}
           originalHexagram={result.originalHexagram}
           changedHexagram={result.changedHexagram}
-          onComplete={() => window.setTimeout(() => router.push(`/divination/result/${result.id}`), 500)}
+          onComplete={() => window.setTimeout(() => router.push(`/divination/result/?id=${encodeURIComponent(result.id)}`), 500)}
         />
       </div>
     );

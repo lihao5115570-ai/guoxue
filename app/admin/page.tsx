@@ -8,13 +8,9 @@ export default function AdminPage() {
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    const response = await fetch("/api/article", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, slug: "wuxing-que-huo", description: "五行缺火的基础理解", category: "五行", content: "草稿内容", status: "draft" })
-    });
-    const data = await response.json();
-    setSaved(data.article.id);
+    const article = { id: `draft-${Date.now()}`, title, slug: "wuxing-que-huo", status: "draft" };
+    localStorage.setItem(`article:${article.id}`, JSON.stringify(article));
+    setSaved(article.id);
   }
 
   return (

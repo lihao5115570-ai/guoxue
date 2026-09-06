@@ -3,6 +3,12 @@ import { privateResultMetadata } from "@/lib/seo/metadata";
 
 export const metadata = privateResultMetadata("年度运势结果", "个人流年结果页不进入公开索引。");
 
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return [{ year: "2026", id: "demo" }];
+}
+
 export default async function FortuneResultPage({ params }: { params: Promise<{ year: string; id: string }> }) {
   const { year } = await params;
   const values = [82, 86, 78, 80, 73, 77, 84, 81, 76, 79, 83, 80];

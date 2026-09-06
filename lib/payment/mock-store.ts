@@ -32,8 +32,7 @@ export function createMockOrder(input: CreateOrderInput): PublicOrder {
     orderNo,
     amount: order.amount,
     payChannel: order.payChannel,
-    status: order.status,
-    qrCodeUrl: `/api/orders/${orderNo}/status`
+    status: order.status
   };
 }
 

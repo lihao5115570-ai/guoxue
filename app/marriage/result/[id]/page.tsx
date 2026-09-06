@@ -3,6 +3,12 @@ import { privateResultMetadata } from "@/lib/seo/metadata";
 
 export const metadata = privateResultMetadata("合婚结果", "个人合婚结果页不进入公开索引。");
 
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return [{ id: "demo" }];
+}
+
 const scores = [["性格契合", 86], ["沟通方式", 72], ["生活方式", 80], ["价值观", 82], ["长期关系", 80]];
 
 export default function MarriageResultPage() {

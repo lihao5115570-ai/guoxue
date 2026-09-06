@@ -28,6 +28,34 @@ function summarize(text: string) {
   return compact.length > 72 ? `${compact.slice(0, 72)}...` : compact;
 }
 
+function safeAmount(value: number) {
+  return Number.isFinite(value) && value > 0 ? Number(value.toFixed(2)) : 6.6;
+}
+
+function createStaticOrder(payload: PaymentPayload, payChannel: PayChannel): PublicOrder {
+  return {
+    orderNo: `OF${Date.now()}`,
+    amount: safeAmount(payload.amount),
+    payChannel,
+    status: "pending"
+  };
+}
+
+function createStaticReceipt(payload: PaymentPayload, order: PublicOrder): OfferingReceipt {
+  const now = new Date().toISOString();
+  return {
+    id: `R${Date.now()}`,
+    orderNo: order.orderNo,
+    targetPerson: payload.targetPerson,
+    blessingType: payload.blessingType,
+    amount: order.amount,
+    prayerSummary: summarize(payload.prayerText),
+    offeringTime: now,
+    status: "已供奉",
+    receiptText: "愿所念皆安，愿所愿渐成。"
+  };
+}
+
 export function PaymentModal({ open, payload, title = "选择支付方式", onBack, onPaid }: PaymentModalProps) {
   const [payChannel, setPayChannel] = useState<PayChannel>("wechat");
   const [stage, setStage] = useState<"select" | "paying">("select");
@@ -49,16 +77,13 @@ export function PaymentModal({ open, payload, title = "选择支付方式", onBa
   if (!open || !payload) return null;
 
   async function createOrderAndPay() {
+    if (!payload) return;
+    const currentPayload = payload;
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("/api/orders/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, payChannel })
-      });
-      if (!response.ok) throw new Error("订单创建失败，请稍后再试。");
-      const createdOrder = (await response.json()) as PublicOrder;
+      await new Promise((resolve) => window.setTimeout(resolve, 300));
+      const createdOrder = createStaticOrder(currentPayload, payChannel);
       setOrder(createdOrder);
       setStage("paying");
     } catch (err) {
@@ -69,24 +94,17 @@ export function PaymentModal({ open, payload, title = "选择支付方式", onBa
   }
 
   async function completeStaticQrPayment() {
-    if (!order) return;
+    if (!order || !payload) return;
+    const currentPayload = payload;
     setLoading(true);
     setError("");
 
     try {
       await new Promise((resolve) => window.setTimeout(resolve, 2100));
-      const statusResponse = await fetch(`/api/orders/${order.orderNo}/status`, { cache: "no-store" });
-      const statusData = (await statusResponse.json()) as { status?: string };
-      if (statusData.status !== "paid") throw new Error("暂未查询到支付完成，请稍后再试。");
-
-      const receiptResponse = await fetch("/api/offerings/receipt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderNo: order.orderNo })
-      });
-      if (!receiptResponse.ok) throw new Error("回执生成失败，请稍后再试。");
-      const receipt = (await receiptResponse.json()) as OfferingReceipt;
-      onPaid({ order: { ...order, status: "paid" }, receipt });
+      const paidOrder: PublicOrder = { ...order, status: "paid" };
+      const receipt = createStaticReceipt(currentPayload, paidOrder);
+      localStorage.setItem(`offering:${paidOrder.orderNo}`, JSON.stringify({ order: paidOrder, receipt }));
+      onPaid({ order: paidOrder, receipt });
     } catch (err) {
       setError(err instanceof Error ? err.message : "支付状态查询失败，请稍后再试。");
     } finally {

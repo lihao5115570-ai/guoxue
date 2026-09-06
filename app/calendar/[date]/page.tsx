@@ -2,6 +2,12 @@ import { pageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = pageMetadata("日期详情｜农历、干支与宜忌", "查看指定日期的公历、农历、干支、生肖、节气与传统宜忌。", "/calendar/date");
 
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return [{ date: "2026-09-06" }];
+}
+
 export default async function CalendarDatePage({ params }: { params: Promise<{ date: string }> }) {
   const { date } = await params;
   return (

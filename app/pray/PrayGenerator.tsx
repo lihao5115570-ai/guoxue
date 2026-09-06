@@ -5,19 +5,11 @@ import { gsap } from "gsap";
 import Link from "next/link";
 import { PaymentModal } from "@/components/PaymentModal";
 import { prayerDirections, type PrayerDirection } from "@/lib/pray/constants";
-import { type PrayerResult } from "@/lib/pray/templates";
+import { generatePrayer, type PrayerResult } from "@/lib/pray/templates";
 import type { CreateOrderInput, OfferingReceipt as PaidOfferingReceipt, PublicOrder } from "@/lib/payment/types";
 
-type OfferingData = {
-  prayerText: string;
-  blessingType: string;
-  targetPerson: string;
-  amount: number;
-  customMessage: string;
+type OfferingOrder = Omit<CreateOrderInput, "payChannel"> & {
   createdAt: string;
-};
-
-type OfferingOrder = OfferingData & {
   orderId: string;
   status: "mock_paid";
 };
@@ -62,18 +54,6 @@ function inferOfferingTarget(recipient: string) {
 
 function inferBlessingType(direction: PrayerDirection) {
   return blessingTypeByDirection[direction] ?? "平安祈愿";
-}
-
-async function createOfferingOrder(offeringData: OfferingData): Promise<OfferingOrder> {
-  // TODO payment integration: 接入真实支付
-  // WeChat Pay / Alipay / Stripe
-  await new Promise((resolve) => window.setTimeout(resolve, 1000));
-
-  return {
-    ...offeringData,
-    orderId: `OF${Date.now()}`,
-    status: "mock_paid"
-  };
 }
 
 function generateOfferingReceipt(orderData: OfferingOrder): OfferingReceipt {
@@ -128,18 +108,8 @@ export function PrayGenerator() {
     setError("");
 
     try {
-      const response = await fetch("/api/pray", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recipient, direction, message })
-      });
-
-      if (!response.ok) {
-        throw new Error("生成失败，请稍后再试。");
-      }
-
-      const data = (await response.json()) as { result: PrayerResult };
-      setResult(data.result);
+      await new Promise((resolve) => window.setTimeout(resolve, 300));
+      setResult(generatePrayer({ recipient, direction, message }));
       setReceipt(null);
       setOrderData(null);
       setAnimationDone(false);

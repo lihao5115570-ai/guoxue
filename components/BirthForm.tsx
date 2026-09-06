@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { createResultId } from "@/lib/bazi/calculator";
 import type { BirthProfileInput } from "@/lib/bazi/types";
 
 type BirthFormProps = {
@@ -28,14 +29,10 @@ export function BirthForm({ compact = false, cta = "开始八字排盘" }: Birth
   async function submit(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
-    const response = await fetch("/api/bazi", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    });
-    const data = (await response.json()) as { id: string };
+    const id = createResultId("bazi", JSON.stringify(form));
     localStorage.setItem("latestBirthProfile", JSON.stringify(form));
-    router.push(`/bazi/result/${data.id}`);
+    localStorage.setItem("latestBaziResultId", id);
+    router.push(`/bazi/result/?id=${encodeURIComponent(id)}`);
   }
 
   return (
