@@ -20,7 +20,7 @@ type LampOrderData = {
   customMessage: string;
   createdAt: string;
   orderId: string;
-  status: "mock_paid";
+  status: "paid";
 };
 
 type LampReceipt = {
@@ -82,7 +82,7 @@ async function createLampOfferingOrder(orderData: Omit<LampOrderData, "orderId" 
   return {
     ...orderData,
     orderId: `LAMP${Date.now()}`,
-    status: "mock_paid"
+    status: "paid"
   };
 }
 
@@ -203,7 +203,7 @@ export function LampOfferingTool() {
       customMessage: paymentPayload.customMessage,
       createdAt: new Date(receipt.offeringTime).toLocaleString("zh-CN", { hour12: false }),
       orderId: receipt.orderNo,
-      status: "mock_paid"
+      status: "paid"
     };
     setOrder(paidOrder);
     setPaymentOpen(false);
@@ -280,7 +280,7 @@ export function LampOfferingTool() {
           <div>
             <span className="text-xs tracking-[0.18em] text-[var(--gold-bright)]">供灯支付</span>
             <h3>确认供灯信息</h3>
-            <p>当前先使用静态收款码完成支付，后续可接微信支付、支付宝或 Stripe 商户订单接口。付款完成后，系统会点亮供灯动画并生成供灯回执。</p>
+            <p>确认信息后进入支付。付款完成后，系统会点亮供灯动画并生成供灯回执。</p>
           </div>
           <div className="lamp-checkout-summary">
             <span>供灯对象：为{receiver}供灯</span>

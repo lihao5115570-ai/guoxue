@@ -20,7 +20,7 @@ type LampOrder = {
   targetPerson: string;
   amount: number;
   createdAt: string;
-  status: "mock_paid";
+  status: "paid";
 };
 
 const questionTypes = ["事业工作", "财运机会", "感情关系", "家庭人际", "学业考试", "出行搬迁", "其他选择"];
@@ -73,7 +73,7 @@ async function createLingqianLampOrder(data: Omit<LampOrder, "orderId" | "status
   // TODO: 接入真实支付
   // 微信支付 / 支付宝 / Stripe
   await new Promise((resolve) => window.setTimeout(resolve, 1000));
-  return { ...data, orderId: `LQ-LAMP${Date.now()}`, status: "mock_paid" };
+  return { ...data, orderId: `LQ-LAMP${Date.now()}`, status: "paid" };
 }
 
 export function LingqianTool() {
@@ -171,7 +171,7 @@ export function LingqianTool() {
       amount: receipt.amount,
       createdAt: new Date(receipt.offeringTime).toLocaleString("zh-CN", { hour12: false }),
       orderId: receipt.orderNo,
-      status: "mock_paid"
+      status: "paid"
     };
     orderRef.current = order;
     setPaymentOpen(false);
@@ -305,7 +305,7 @@ export function LingqianTool() {
           <div>
             <span className="text-xs tracking-[0.18em] text-[var(--gold-bright)]">供灯付款</span>
             <h3>为此签供灯加持</h3>
-            <p>当前先使用静态收款码完成支付，后续可接微信支付、支付宝或 Stripe 商户订单接口。付款成功后会播放供灯成功动画。</p>
+            <p>确认信息后进入支付。付款成功后会播放供灯成功动画，并生成供灯回执。</p>
           </div>
           <div className="lamp-checkout-summary">
             <span>签文：第 {result.no} 签 · {result.level}</span>

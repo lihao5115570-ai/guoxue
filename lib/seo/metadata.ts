@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 const siteName = "禅心阁";
-const baseUrl = "https://example.com";
+const baseUrl = "https://www.bianmei.xyz";
 
 export function pageMetadata(title: string, description: string, path = "/"): Metadata {
   const canonical = `${baseUrl}${path}`;

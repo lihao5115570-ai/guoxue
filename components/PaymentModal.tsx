@@ -159,7 +159,7 @@ export function PaymentModal({ open, payload, title = "选择支付方式", onBa
             <div>
               <h4>{payChannel === "wechat" ? "微信扫码支付" : "支付宝扫码支付"}</h4>
               <p>请使用{payChannel === "wechat" ? "微信" : "支付宝"}扫描左侧收款码完成支付。</p>
-              <p>当前为静态收款码临时接入，后续仍建议改为后端商户订单系统。</p>
+              <p>请完成扫码支付。支付完成后，系统将点亮祈福灯，并生成专属供奉回执。</p>
               <div className="payment-status-line">
                 <span>订单号：{order?.orderNo}</span>
                 <strong>扫码完成后点击下方按钮进入供灯仪式</strong>

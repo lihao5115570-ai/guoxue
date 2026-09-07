@@ -22,9 +22,10 @@ const groups: Array<{
     title: "网站服务",
     icon: "book",
     links: [
-      ["关于我们", "/topics/about"],
-      ["隐私政策", "/topics/privacy"],
-      ["免责声明", "/topics/disclaimer"],
+      ["关于我们", "/about"],
+      ["隐私政策", "/privacy"],
+      ["免责声明", "/disclaimer"],
+      ["服务说明", "/service"],
       ["文章中心", "/articles"],
       ["管理后台", "/admin"]
     ]

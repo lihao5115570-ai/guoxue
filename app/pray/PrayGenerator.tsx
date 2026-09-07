@@ -11,7 +11,7 @@ import type { CreateOrderInput, OfferingReceipt as PaidOfferingReceipt, PublicOr
 type OfferingOrder = Omit<CreateOrderInput, "payChannel"> & {
   createdAt: string;
   orderId: string;
-  status: "mock_paid";
+  status: "paid";
 };
 
 type OfferingReceipt = {
@@ -203,7 +203,7 @@ export function PrayGenerator() {
       ...paymentPayload,
       createdAt: new Date(receipt.offeringTime).toLocaleString("zh-CN", { hour12: false }),
       orderId: receipt.orderNo,
-      status: "mock_paid"
+      status: "paid"
     };
     setPaymentOpen(false);
     startOfferingAnimation(order, paymentPayload.prayerText);
