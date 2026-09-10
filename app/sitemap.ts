@@ -9,7 +9,7 @@ import { baziToolNav, buddhistSupportNav } from "@/lib/content/buddhist";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://www.bianmei.xyz";
+  const base = "https://chanxinge.top";
   const publicRoutes = ["/", "/bazi", "/wuxing", "/wealth", "/love", "/fortune", "/marriage", "/divination", "/chenggu", "/calendar", "/wiki", "/topics", "/articles", "/celebrities", "/classics", "/classics/fengshui"];
   return [
     ...publicRoutes.map((route) => ({ url: `${base}${route}`, lastModified: new Date() })),

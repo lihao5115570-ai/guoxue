@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/api", "/user", "/bazi/result", "/marriage/result", "/divination/result", "/fortune/"]
     },
-    sitemap: "https://www.bianmei.xyz/sitemap.xml"
+    sitemap: "https://chanxinge.top/sitemap.xml"
   };
 }
