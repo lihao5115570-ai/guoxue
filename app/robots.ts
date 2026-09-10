@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/api", "/user", "/bazi/result", "/marriage/result", "/divination/result", "/fortune/"]
+      disallow: ["/admin", "/api", "/user", "/bazi/result", "/marriage/result", "/divination/result"]
     },
     sitemap: "https://chanxinge.top/sitemap.xml"
   };
